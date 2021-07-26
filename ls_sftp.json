@@ -1,0 +1,31 @@
+{
+    "name": "ls_sftp",
+    "properties": {
+        "annotations": [],
+        "type": "Sftp",
+        "typeProperties": {
+            "host": "sftp.chevron.com",
+            "port": 22,
+            "skipHostKeyValidation": true,
+            "authenticationType": "SshPublicKey",
+            "userName": "svc-imoipaas-sapbi-readonly",
+            "privateKeyContent": {
+                "type": "AzureKeyVaultSecret",
+                "store": {
+                    "referenceName": "ls_smdppfkeyvault",
+                    "type": "LinkedServiceReference"
+                },
+                "secretName": "sftp-Imoipaas-readonly-privatekey"
+            },
+            "passPhrase": {
+                "type": "AzureKeyVaultSecret",
+                "store": {
+                    "referenceName": "ls_smdppfkeyvault",
+                    "type": "LinkedServiceReference"
+                },
+                "secretName": "sftp-imoipaas-readonly-passphrase"
+            }
+        }
+    },
+    "type": "Microsoft.DataFactory/factories/linkedservices"
+}

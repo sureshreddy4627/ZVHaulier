@@ -1,0 +1,163 @@
+{
+    "name": "pl_CopyZVHaulierSFTPToADLSGen2",
+    "properties": {
+        "activities": [
+            {
+                "name": "ZVHaulierPC2SFTPToADLSGen2",
+                "type": "Copy",
+                "dependsOn": [
+                    {
+                        "activity": "Set KeyVault",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "policy": {
+                    "timeout": "7.00:00:00",
+                    "retry": 0,
+                    "retryIntervalInSeconds": 30,
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "userProperties": [],
+                "typeProperties": {
+                    "source": {
+                        "type": "DelimitedTextSource",
+                        "storeSettings": {
+                            "type": "SftpReadSettings",
+                            "recursive": false,
+                            "wildcardFileName": "zvhaulier*2*"
+                        },
+                        "formatSettings": {
+                            "type": "DelimitedTextReadSettings"
+                        }
+                    },
+                    "sink": {
+                        "type": "DelimitedTextSink",
+                        "storeSettings": {
+                            "type": "AzureBlobFSWriteSettings"
+                        },
+                        "formatSettings": {
+                            "type": "DelimitedTextWriteSettings",
+                            "quoteAllText": true,
+                            "fileExtension": ".dat"
+                        }
+                    },
+                    "enableStaging": false
+                },
+                "inputs": [
+                    {
+                        "referenceName": "ds_imoipaas_sapbi",
+                        "type": "DatasetReference",
+                        "parameters": {
+                            "dynamic_folderPath": {
+                                "value": "@pipeline().parameters.dynamic_folderPath",
+                                "type": "Expression"
+                            }
+                        }
+                    }
+                ],
+                "outputs": [
+                    {
+                        "referenceName": "ds_chevrondatalakepc2_zvhaulier",
+                        "type": "DatasetReference"
+                    }
+                ]
+            },
+            {
+                "name": "ZVHaulierPC8SFTPToADLSGen2",
+                "type": "Copy",
+                "dependsOn": [
+                    {
+                        "activity": "ZVHaulierPC2SFTPToADLSGen2",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "policy": {
+                    "timeout": "7.00:00:00",
+                    "retry": 0,
+                    "retryIntervalInSeconds": 30,
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "userProperties": [],
+                "typeProperties": {
+                    "source": {
+                        "type": "DelimitedTextSource",
+                        "storeSettings": {
+                            "type": "SftpReadSettings",
+                            "recursive": false,
+                            "wildcardFileName": "zvhaulier*8*"
+                        },
+                        "formatSettings": {
+                            "type": "DelimitedTextReadSettings"
+                        }
+                    },
+                    "sink": {
+                        "type": "DelimitedTextSink",
+                        "storeSettings": {
+                            "type": "AzureBlobFSWriteSettings"
+                        },
+                        "formatSettings": {
+                            "type": "DelimitedTextWriteSettings",
+                            "quoteAllText": true,
+                            "fileExtension": ".dat"
+                        }
+                    },
+                    "enableStaging": false
+                },
+                "inputs": [
+                    {
+                        "referenceName": "ds_imoipaas_sapbi",
+                        "type": "DatasetReference",
+                        "parameters": {
+                            "dynamic_folderPath": {
+                                "value": "@pipeline().parameters.dynamic_folderPath",
+                                "type": "Expression"
+                            }
+                        }
+                    }
+                ],
+                "outputs": [
+                    {
+                        "referenceName": "ds_chevrondatalakepc8_zvhaulier",
+                        "type": "DatasetReference"
+                    }
+                ]
+            },
+            {
+                "name": "Set KeyVault",
+                "type": "SetVariable",
+                "dependsOn": [],
+                "userProperties": [],
+                "typeProperties": {
+                    "variableName": "keyvault",
+                    "value": {
+                        "value": "@pipeline().parameters.dynamic_keyVault",
+                        "type": "Expression"
+                    }
+                }
+            }
+        ],
+        "parameters": {
+            "dynamic_keyVault": {
+                "type": "string",
+                "defaultValue": "smdpdf-t216-dev"
+            },
+            "dynamic_folderPath": {
+                "type": "string",
+                "defaultValue": "dev/in"
+            }
+        },
+        "variables": {
+            "keyvault": {
+                "type": "String"
+            }
+        },
+        "annotations": []
+    },
+    "type": "Microsoft.DataFactory/factories/pipelines"
+}

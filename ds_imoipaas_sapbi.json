@@ -1,0 +1,35 @@
+{
+    "name": "ds_imoipaas_sapbi",
+    "properties": {
+        "linkedServiceName": {
+            "referenceName": "ls_sftp",
+            "type": "LinkedServiceReference"
+        },
+        "parameters": {
+            "dynamic_folderPath": {
+                "type": "string",
+                "defaultValue": "/test/in"
+            }
+        },
+        "annotations": [],
+        "type": "DelimitedText",
+        "typeProperties": {
+            "location": {
+                "type": "SftpLocation",
+                "folderPath": {
+                    "value": "@dataset().dynamic_folderPath",
+                    "type": "Expression"
+                }
+            },
+            "columnDelimiter": ",",
+            "escapeChar": "\\",
+            "quoteChar": "\""
+        },
+        "schema": [
+            {
+                "type": "String"
+            }
+        ]
+    },
+    "type": "Microsoft.DataFactory/factories/datasets"
+}
